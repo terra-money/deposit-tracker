@@ -26,5 +26,5 @@ $ yarn start
     "query_per_page": 100,                // # of txs(= page size) to prevent huge response
     "start_height": 1880650,              // tracking start point; it can be past block height
     "receiver_address": "terra13u66u4knssnws7n7w0n38mzyyqak5ygp807gyl" // tracking target address
-}
-```
+}
+```
