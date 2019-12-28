@@ -43,7 +43,7 @@ async function sequentialTracking() {
     let page = 1
     for(;;page+=1) {
       // To prevent huge memory consumption, restrict query with height range
-      const queryParams = `query="tx.height>=${height} AND tx.height<${height+queryHeightUnit} AND action='send' AND recipient='${receiverAddress}'"&page=${page}&per_page=${queryPerPage}`
+      const queryParams = `query="tx.height>=${height} AND tx.height<${height+queryHeightUnit} AND transfer.recipient='${receiverAddress}'"&page=${page}&per_page=${queryPerPage}`
       const res = (await ax.get(`${nodeURL}/tx_search?${queryParams}`))['data']['result']
       const totalCount = res['total_count']
       const txs = res['txs']
@@ -89,12 +89,12 @@ function realtimeTracking() {
   
           try {
             const jsonRes = JSON.parse(message.utf8Data)
-            if ( !jsonRes['result'] || !jsonRes['result']['data'] || !jsonRes['result']['tags'] ) return
+            if ( !jsonRes['result'] || !jsonRes['result']['data'] || !jsonRes['result']['events'] ) return
             const txbytes = jsonRes['result']['data']['value']['TxResult']['tx']
             parseAndEmitTx(txbytes)
 
             // Update start_height config
-            const height = parseInt(jsonRes['result']['tags']['tx.height'], 10)
+            const height = parseInt(jsonRes['result']['events']['tx.height'], 10)
             updateConfig(height)
           } catch (err) {
             console.error(`Parseing Error: ${err}`)
@@ -109,7 +109,7 @@ function realtimeTracking() {
       'method': 'subscribe',
       'id': '0',
       'params': {
-        'query': `tm.event='Tx' AND action='send' AND recipient='${receiverAddress}'`
+        'query': `tm.event='Tx' AND transfer.recipient='${receiverAddress}'`
       }
     }))
   });
