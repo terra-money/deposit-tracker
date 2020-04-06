@@ -1,6 +1,6 @@
 {
   "name": "@terra-money/deposit-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Track deposit transactions of an address",
   "scripts": {
     "start": "ts-node src/index.ts",
